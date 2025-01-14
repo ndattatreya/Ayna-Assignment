@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  websocket:
+    build: .
+    ports:
+      - "3001:3001"
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - websocket
