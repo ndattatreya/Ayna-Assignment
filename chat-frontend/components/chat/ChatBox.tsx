@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import ChatBubble from "./ChatBubble";
 import ChatInput from "./ChatInput";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 
 type ChatMessage = {
   owner: boolean;
@@ -12,7 +12,7 @@ type ChatMessage = {
 
 const ChatBox = () => {
   const [chat, setChat] = useState<ChatMessage[]>([]);
-  const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const router = useRouter();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -63,6 +63,7 @@ const ChatBox = () => {
 
   const sendMessage = (message: ChatMessage) => {
     appendChat(message);
+    if (!socket) return;
     socket.emit("message", message);
   };
 

@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import ThemeToggle from "@/components/Header/ThemeToggle";
 import Link from "next/link";
+import { AxiosError } from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +16,6 @@ const Login = () => {
   const [errors, setErrors] = useState({ email: "", password: "", api: "" });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -55,22 +54,16 @@ const Login = () => {
       localStorage.setItem("token", jwt);
       localStorage.setItem("user", JSON.stringify(user));
 
-      toast({
-        title: "Login Successful",
-        description: "Redirecting to chat...",
-      });
-
       router.push("/");
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error?.message || "Invalid credentials.";
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error?.response?.data?.error?.message || "Invalid credentials.";
 
-      setErrors({ email: "", password: "", api: errorMessage });
-      toast({
-        title: "Login Failed",
-        description: errorMessage,
-        variant: "destructive",
-      });
+        setErrors({ email: "", password: "", api: errorMessage });
+      } else {
+        setErrors({ email: "", password: "", api: "Something went wrong." });
+      }
     } finally {
       setLoading(false);
     }

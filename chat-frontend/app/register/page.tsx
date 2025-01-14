@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 import ThemeToggle from "@/components/Header/ThemeToggle";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { AxiosError } from "axios";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -24,7 +24,6 @@ const Register = () => {
     api: "",
   });
   const router = useRouter();
-  const { toast } = useToast();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -74,28 +73,27 @@ const Register = () => {
       localStorage.setItem("token", jwt);
       localStorage.setItem("user", JSON.stringify(user));
 
-      toast({
-        title: "Registration Successful",
-        description: "You have successfully registered. Redirecting to chat...",
-      });
-
       router.push("/");
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error?.message || "Invalid credentials.";
-
-      setErrors({
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        api: errorMessage,
-      });
-      toast({
-        title: "An error occurred",
-        description: error.response?.data?.error?.message || "Please try again",
-        variant: "destructive",
-      });
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.error?.message || "Invalid credentials.";
+        setErrors({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          api: errorMessage,
+        });
+      } else {
+        setErrors({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          api: "Something went wrong.",
+        });
+      }
     } finally {
       setLoading(false);
     }
