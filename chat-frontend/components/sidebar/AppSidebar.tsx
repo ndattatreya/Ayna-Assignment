@@ -1,6 +1,4 @@
 "use client";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-
 import {
   Sidebar,
   SidebarContent,
@@ -17,12 +15,15 @@ import { useChat } from "@/context/ChatContext";
 import { ScrollArea } from "../ui/scroll-area";
 
 export function AppSidebar() {
-  const [chats, setChats] = useState(() => {
+  const [chats, setChats] = useState<string[]>(["Chat 1"]);
+
+  useEffect(() => {
     const chats = localStorage.getItem("chats");
-    if (!chats) return ["Chat 1"];
-    const storedChats = JSON.parse(chats);
-    return storedChats;
-  });
+    if (chats) {
+      const storedChats = JSON.parse(chats);
+      setChats(storedChats);
+    }
+  }, []);
 
   const { selectedChat, setSelectedChat } = useChat();
 
