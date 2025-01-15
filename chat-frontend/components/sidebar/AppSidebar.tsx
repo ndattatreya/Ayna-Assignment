@@ -15,15 +15,13 @@ import { useChat } from "@/context/ChatContext";
 import { ScrollArea } from "../ui/scroll-area";
 
 export function AppSidebar() {
-  const [chats, setChats] = useState<string[]>(["Chat 1"]);
-
-  useEffect(() => {
-    const chats = localStorage.getItem("chats");
-    if (chats) {
-      const storedChats = JSON.parse(chats);
-      setChats(storedChats);
+  const [chats, setChats] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      const storedChats = localStorage.getItem("chats");
+      return storedChats ? JSON.parse(storedChats) : ["Chat 1"];
     }
-  }, []);
+    return ["Chat 1"];
+  });
 
   const { selectedChat, setSelectedChat } = useChat();
 
@@ -32,7 +30,9 @@ export function AppSidebar() {
   };
 
   useEffect(() => {
-    localStorage.setItem("chats", JSON.stringify(chats));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("chats", JSON.stringify(chats));
+    }
   }, [chats]);
 
   const addChat = () => {
