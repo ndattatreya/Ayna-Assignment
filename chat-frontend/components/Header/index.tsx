@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
+import { SidebarTrigger } from "../ui/sidebar";
 
 const Header = () => {
   const router = useRouter();
@@ -12,9 +13,10 @@ const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-900">
+    <header className="flex items-center justify-between p-4 bg-gray-100 dark:bg-background border-b dark:border-gray-800">
+      <SidebarTrigger />
       <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-        Chat
+        Chat App
       </h1>
 
       <div className="flex items-center gap-4">

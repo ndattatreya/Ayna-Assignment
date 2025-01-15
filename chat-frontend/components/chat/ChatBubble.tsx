@@ -19,7 +19,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
           message.owner
             ? "bg-primary text-white"
             : "bg-slate-100 dark:bg-gray-700 text-black dark:text-slate-200"
-        } break-words max-w-[70vw]`}
+        } break-words max-w-[50vw]`}
       >
         <p>{message.content}</p>
       </div>

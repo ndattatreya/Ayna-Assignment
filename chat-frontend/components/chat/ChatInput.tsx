@@ -14,17 +14,15 @@ interface ChatInputProps {
 const ChatInput: React.FC<ChatInputProps> = ({ appendChat }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
   const inputRef = useRef<HTMLInputElement>(null);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!message.trim()) return;
 
     setLoading(true);
-    const Message = { owner: true, content: message };
-    appendChat(Message);
+    const newMessage = { owner: true, content: message };
+    appendChat(newMessage);
     setMessage("");
     setLoading(false);
   };
@@ -36,10 +34,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ appendChat }) => {
   }, []);
 
   return (
-    <div className="h-[10vh] ">
+    <div className="w-full">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-row items-center justify-between px-3 py-2 mx-4 sm:mx-6 lg:mx-10 xl:mx-18 2xl:mx-48 border-2 rounded-2xl border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-gray-900 text-slate-black dark:text-slate-200"
+        className="flex flex-row items-center justify-between px-3 py-2 mx-4 border-2 rounded-2xl border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-gray-900 text-slate-black dark:text-slate-200"
       >
         <input
           ref={inputRef}
@@ -54,14 +52,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ appendChat }) => {
           <button
             type="submit"
             disabled={loading}
-            className="p-2 px-4 bg-slate-200 dark:bg-gray-800 
-             hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl"
+            className="p-2 bg-slate-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-xl"
           >
-            <SendHorizontal size={28} color="#aeadad" strokeWidth={2.25} />
+            <SendHorizontal size={20} color="#6b7280" strokeWidth={2} />
           </button>
         ) : (
-          <div className="flex flex-row items-center h-10 mr-4">
-            <Loader2 />
+          <div className="p-2">
+            <Loader2 size={20} className="animate-spin text-slate-400" />
           </div>
         )}
       </form>
