@@ -14,7 +14,7 @@ const ThemeToggle = () => {
       onClick={toggleTheme}
       className="p-2 bg-gray-200 dark:bg-gray-700 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600"
     >
-      {resolvedTheme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+      {resolvedTheme === "light" ? <Moon size={20} /> : <Sun size={20} />}
     </button>
   );
 };
