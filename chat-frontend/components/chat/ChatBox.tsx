@@ -39,7 +39,7 @@ const ChatBox = () => {
     return () => {
       socketConnection.disconnect();
     };
-  }, [router]);
+  }, [router, selectedChat]);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
